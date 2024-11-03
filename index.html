@@ -1,0 +1,145 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de CURP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f2; /* Fondo rosa claro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffcce6; /* Color rosado claro */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        h2 {
+            color: #d63384; /* Título en color rosado oscuro */
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #d63384;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 5px;
+            border: none;
+        }
+        button[type="submit"] {
+            background-color: #d63384;
+            color: white;
+        }
+        button[type="button"] {
+            background-color: #ff6699;
+            color: white;
+        }
+        .tables {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .table-container {
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #d63384;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #d63384;
+            color: white;
+        }
+        .mensaje-sintactico {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+        .correcto {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .contador-tokens {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Analizador de CURP</h2>
+        <form method="POST">
+            <input type="text" name="curp" value="{{ curp }}" placeholder="Ingresa tu CURP" required />
+            <div class="button-container">
+                <button type="submit">Validar</button>
+                <button type="button" onclick="document.querySelector('input[name=curp]').value = '';">Borrar</button>
+            </div>
+        </form>
+
+        {% if mensaje_sintactico %}
+            <div class="mensaje-sintactico {% if mensaje_sintactico == 'CURP Valida.' %}correcto{% endif %}">
+                {{ mensaje_sintactico }}
+            </div>
+        {% endif %}
+
+        <div class="tables">
+            <div class="table-container">
+                <h3>Análisis Léxico</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campo, valor in tabla_lexico %}
+                        <tr>
+                            <td>{{ campo }}</td>
+                            <td>{{ valor }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contador de Tokens como texto -->
+        <div class="contador-tokens">
+            <p><strong>Contador de Tokens:</strong></p>
+            <p>Letras: {{ token_count['Letras'] }}, Números: {{ token_count['Números'] }}, Otros: {{ token_count['Otros'] }}</p>
+        </div>
+    </div>
+
+</body>
+</html>
